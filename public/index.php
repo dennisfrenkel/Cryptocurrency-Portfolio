@@ -5,6 +5,7 @@ use app\core\Router;
 
 try {
     // Instantiate the Router to handle incoming requests
+    // Troubleshooting 
     $router = new Router();
 } catch (Exception $e) {
     if (DEBUG) {
