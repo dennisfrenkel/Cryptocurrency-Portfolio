@@ -1,0 +1,111 @@
+/* General Styling */
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
+}
+
+.container {
+    display: flex;
+    width: 100%;
+}
+
+/* Sidebar Styling */
+#live-sidebar {
+    width: 25%;
+    max-width: 300px;
+    padding: 20px;
+    background-color: #333;
+    color: white;
+    height: 100vh;
+    overflow-y: auto;
+    position: sticky;
+    top: 0;
+}
+
+#live-sidebar h2 {
+    margin-top: 0;
+    text-align: center;
+}
+
+#crypto-prices-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+#crypto-prices-list li {
+    padding: 10px 5px;
+    border-bottom: 1px solid #444;
+    display: flex;
+    justify-content: space-between;
+}
+
+#crypto-prices-list li span {
+    font-weight: bold;
+}
+
+/* Main Content Styling */
+main {
+    flex-grow: 1;
+    padding: 20px;
+    background-color: white;
+    border-left: 1px solid #ddd;
+}
+
+main h1 {
+    text-align: center;
+    margin-top: 0;
+}
+
+/* Portfolio Section */
+#portfolio {
+    margin-top: 20px;
+}
+
+#portfolio h2 {
+    margin-top: 0;
+}
+
+form {
+    margin-top: 10px;
+}
+
+form input, form button, form textarea {
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+/* ChatGPT Recommendations Section */
+#chatgpt-recommendations {
+    margin-top: 20px;
+    padding: 20px;
+    background: #f8f9fa;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+#chatgpt-recommendations h2 {
+    margin-top: 0;
+}
+
+#recommendation-result {
+    margin-top: 10px;
+    font-style: italic;
+}

@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crypto Portfolio Tracker</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body, h1, h2, p, ul, li, input, button, textarea {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Body and Background */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(to bottom right, #1c1f33, #283149);
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            display: flex;
+            width: 100%;
+            max-width: 1400px;
+            background: rgba(20, 22, 38, 0.9);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Sidebar */
+        #live-sidebar {
+            width: 30%;
+            background: linear-gradient(to bottom, #283149, #3b4662);
+            padding: 20px;
+            border-right: 3px solid #1c1f33;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #live-sidebar h2 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #4cd3c2;
+            text-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        #crypto-prices-list {
+            width: 100%;
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        #crypto-prices-list li {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 18px;
+            color: #d1d5db;
+            transition: transform 0.2s ease, box-shadow 0.3s ease;
+        }
+
+        #crypto-prices-list li:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        #crypto-prices-list li span {
+            font-weight: 600;
+        }
+
+        /* Main Content */
+        main {
+            width: 70%;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        main h1 {
+            font-size: 36px;
+            font-weight: 700;
+            text-align: center;
+            color: #4cd3c2;
+            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Portfolio Section */
+        #portfolio {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .transaction-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            width: 300px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-align: center;
+        }
+
+        .transaction-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .transaction-card h3 {
+            font-size: 22px;
+            font-weight: 600;
+            color: #4cd3c2;
+            margin-bottom: 10px;
+        }
+
+        .transaction-card p {
+            font-size: 16px;
+            margin-bottom: 8px;
+            color: #d0e7f9;
+        }
+
+        /* ChatGPT Recommendations */
+        #chatgpt-recommendations {
+            padding: 20px;
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        #chatgpt-recommendations h2 {
+            font-size: 24px;
+            font-weight: 600;
+            color: #4cd3c2;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        #recommendation-input {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #1c2a3a;
+            border-radius: 10px;
+            font-size: 16px;
+            margin-bottom: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+        }
+
+        #recommendation-form button {
+            width: 100%;
+            padding: 15px;
+            font-size: 18px;
+            font-weight: 600;
+            background: #4cd3c2;
+            border: none;
+            border-radius: 10px;
+            color: #798a9a;
+            cursor: pointer;
+            transition: background 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        #recommendation-form button:hover {
+            background: #42b6aa;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        #recommendation-result {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            font-size: 16px;
+            font-style: italic;
+            text-align: center;
+        }
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+
+            #live-sidebar {
+                width: 100%;
+                border-right: none;
+                border-bottom: 2px solid #1c1f33;
+            }
+
+            main {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar for Live Prices -->
+        <aside id="live-sidebar">
+            <h2>Live Crypto Prices</h2>
+            <ul id="crypto-prices-list">
+                <li>Loading prices...</li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main>
+            <h1>Cryptocurrency Portfolio Tracker</h1>
+
+            <!-- Portfolio Section -->
+            <section id="portfolio">
+                <h2>Add a Transaction</h2>
+                <form id="transaction-form">
+                    <input type="text" id="crypto-name" placeholder="Cryptocurrency" required>
+                    <input type="number" id="crypto-quantity" placeholder="Quantity" step="0.00000001" required>
+                    <input type="number" id="crypto-price" placeholder="Price (USD)" step="0.01" required>
+                    <button type="submit">Add Transaction</button>
+                </form>
+            </section>
+
+            <!-- AI Recommendations Section -->
+            <section id="chatgpt-recommendations">
+                <h2>AI Recommendations</h2>
+                <div id="recommendation-result">
+                    <p>Ask for advice about your portfolio!</p>
+                </div>
+                <form id="recommendation-form">
+                    <textarea id="recommendation-input" placeholder="Type your question here..." required></textarea>
+                    <button type="submit">Get Recommendation</button>
+                </form>
+            </section>
+        </main>
+    </div>
+
+    <script src="./assets/js/homepage.js"></script>
+</body>
+</html>

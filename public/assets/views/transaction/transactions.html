@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Transactions</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(to bottom right, #1a1a2e, #16213e);
+            color: #fff;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #222831;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #00adb5;
+            text-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: #1b1f28;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        thead th {
+            background: #393e46;
+            color: #00adb5;
+            text-align: left;
+            padding: 15px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        thead th:hover {
+            background: #4b5563;
+        }
+
+        thead th span.sort-icon {
+            margin-left: 10px;
+            font-size: 14px;
+            cursor: pointer;
+            vertical-align: middle;
+        }
+
+        tbody tr {
+            background: #2c2f3a;
+            transition: background 0.3s ease;
+        }
+
+        tbody tr:hover {
+            background: #393e46;
+        }
+
+        tbody td {
+            padding: 15px;
+            border-top: 1px solid #393e46;
+        }
+
+        #error-message {
+            color: #ff4d4d;
+            text-align: center;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Your Transactions</h1>
+
+        <table id="transactions-table">
+            <thead>
+                <tr>
+                    <th data-sort="id">ID <span class="sort-icon">⇅</span></th>
+                    <th data-sort="cryptocurrency">Cryptocurrency <span class="sort-icon">⇅</span></th>
+                    <th data-sort="quantity">Quantity <span class="sort-icon">⇅</span></th>
+                    <th data-sort="price">Price (USD) <span class="sort-icon">⇅</span></th>
+                    <th data-sort="date">Date <span class="sort-icon">⇅</span></th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+        <p id="error-message" style="display: none;"></p>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", async () => {
+            const transactionsTableBody = document.querySelector("#transactions-table tbody");
+            const errorMessage = document.getElementById("error-message");
+            const headers = document.querySelectorAll("th[data-sort]");
+            let transactions = [];
+
+            const fetchTransactions = async () => {
+                try {
+                    const response = await fetch("/api/transactions");
+
+                    if (!response.ok) {
+                        if (response.status === 401) {
+                            errorMessage.textContent = "You must be logged in to view transactions.";
+                            errorMessage.style.display = "block";
+                            return;
+                        }
+                        throw new Error("Failed to fetch transactions.");
+                    }
+
+                    transactions = await response.json();
+
+                    if (transactions && Array.isArray(transactions)) {
+                        renderTransactions(transactions);
+                    } else {
+                        transactionsTableBody.innerHTML = `<tr><td colspan="5">No transactions found.</td></tr>`;
+                    }
+                } catch (error) {
+                    console.error("Error fetching transactions:", error);
+                    errorMessage.textContent = "Error loading transactions. Please try again later.";
+                    errorMessage.style.display = "block";
+                }
+            };
+
+            const renderTransactions = (data) => {
+                transactionsTableBody.innerHTML = data
+                    .map(tx => `
+                        <tr>
+                            <td>${tx.id}</td>
+                            <td>${tx.cryptocurrency}</td>
+                            <td>${parseFloat(tx.quantity).toFixed(2)}</td>
+                            <td>${parseFloat(tx.price).toFixed(2)}</td>
+                            <td>${new Date(tx.transaction_date).toLocaleString()}</td>
+                        </tr>
+                    `).join("");
+            };
+
+            const sortTransactions = (criteria, direction = 'asc') => {
+                let sortedTransactions = [...transactions];
+                sortedTransactions.sort((a, b) => {
+                    if (criteria === "date") {
+                        const dateA = new Date(a.transaction_date);
+                        const dateB = new Date(b.transaction_date);
+                        return direction === 'asc' ? dateA - dateB : dateB - dateA;
+                    }
+                    if (typeof a[criteria] === "string") {
+                        return direction === 'asc' ? a[criteria].localeCompare(b[criteria]) : b[criteria].localeCompare(a[criteria]);
+                    }
+                    return direction === 'asc' ? a[criteria] - b[criteria] : b[criteria] - a[criteria];
+                });
+                renderTransactions(sortedTransactions);
+            };
+
+            headers.forEach(header => {
+                header.addEventListener("click", () => {
+                    const sortCriteria = header.getAttribute("data-sort");
+                    const currentDirection = header.dataset.direction || 'asc';
+                    const newDirection = currentDirection === 'asc' ? 'desc' : 'asc';
+                    header.dataset.direction = newDirection;
+
+                    sortTransactions(sortCriteria, newDirection);
+
+                    // Reset other headers' directions
+                    headers.forEach(h => {
+                        if (h !== header) {
+                            h.removeAttribute('data-direction');
+                        }
+                    });
+                });
+            });
+
+            await fetchTransactions();
+        });
+    </script>
+</body>
+</html>
