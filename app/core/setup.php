@@ -34,7 +34,7 @@ if (!$env) {
     die("Error: Failed to parse .env file.");
 }
 
-// Define database configurations
+// Define database 
 define('DBNAME', $env['DBNAME']);
 define('DBHOST', $env['DBHOST']);
 define('DBUSER', $env['DBUSER']);
