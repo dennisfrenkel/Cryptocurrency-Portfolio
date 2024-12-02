@@ -1,5 +1,4 @@
 <?php
-
 namespace app\controllers;
 
 class MainController extends Controller {
@@ -13,8 +12,12 @@ class MainController extends Controller {
     /**
      * ChatGPT recommendation based on user input.
      */
-    public function getChatGPTRecommendation() {
-        $apiKey = getenv('OPENAI_API_KEY');
+  
+     public function getChatGPTRecommendation() {
+
+        $apiKey = OPENAI_API_KEY;
+    
+        // Check if the API key is available
         if (!$apiKey) {
             $this->returnJSON([
                 'status' => 'error',
@@ -22,23 +25,26 @@ class MainController extends Controller {
             ]);
             return;
         }
-
+    
         $postData = json_decode(file_get_contents("php://input"), true);
         $question = $postData['question'] ?? 'What are some cryptocurrency investment tips?';
-
-        $headers = [
-            "Authorization: Bearer $apiKey",
-            "Content-Type: application/json",
-        ];
-
+    
+        // Echo 
+        echo 'Question: ' . $question;  
+    
         $payload = json_encode([
-            "model" => "gpt-4",
+            "model" => "gpt-4o-mini",
             "messages" => [
-                ["role" => "system", "content" => "You are an expert cryptocurrency portfolio advisor."],
+                ["role" => "system", "content" => "You are a cryptocurrency advisor. Answer any questions about cryptocurrency investments, portfolio management, and market trends."],
                 ["role" => "user", "content" => $question],
             ],
             "max_tokens" => 150,
         ]);
+    
+        $headers = [
+            "Authorization: Bearer $apiKey",
+            "Content-Type: application/json",
+        ];
 
         $ch = curl_init("https://api.openai.com/v1/chat/completions");
         curl_setopt_array($ch, [
@@ -47,28 +53,38 @@ class MainController extends Controller {
             CURLOPT_HTTPHEADER => $headers,
             CURLOPT_POSTFIELDS => $payload,
         ]);
-
+    
+ 
         $response = curl_exec($ch);
-
+    
+        // Check for cURL errors
         if (curl_errno($ch)) {
             $this->returnJSON(['status' => 'error', 'message' => 'Error communicating with OpenAI: ' . curl_error($ch)]);
             curl_close($ch);
             return;
         }
-
+    
         curl_close($ch);
-
+    
+        echo "Raw Response:\n";
+        echo $response;
+    
+        // Decode the response 
         $responseData = json_decode($response, true);
+    
+        // Get the recommendation
         $recommendation = $responseData['choices'][0]['message']['content'] ?? 'No recommendation available.';
-
+    
+        // Return the recommendation
         $this->returnJSON(['recommendation' => $recommendation]);
     }
 
     /**
-     * live cryptocurrency prices using the CoinMarketCap API.
+     * Live cryptocurrency prices using the CoinMarketCap API.
      */
     public function getCryptoPrices() {
-        $apiKey = getenv('CMC_API_KEY');
+        $apiKey = CMC_API_KEY;
+
         if (!$apiKey) {
             $this->returnJSON([
                 'status' => 'error',

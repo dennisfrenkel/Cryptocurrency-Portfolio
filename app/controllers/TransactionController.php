@@ -78,7 +78,7 @@ class TransactionController extends Controller {
     }
 
     /**
-     * transactions table view.
+     * Render the transactions table view.
      */
     public function transactionsView() {
         if (!$this->isAuthenticated()) {

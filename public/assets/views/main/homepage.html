@@ -1,9 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crypto Portfolio Tracker</title>
+    <title>Cryptocurrency Portfolio Tracker</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         body, h1, h2, p, ul, li, input, button, textarea {
@@ -56,19 +57,19 @@
         #crypto-prices-list {
             width: 100%;
             list-style: none;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
+            padding: 0;
+            margin: 0;
         }
 
         #crypto-prices-list li {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 15px;
-            border-radius: 10px;
+            padding: 10px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             font-size: 18px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            margin-bottom: 10px;
             color: #d1d5db;
             transition: transform 0.2s ease, box-shadow 0.3s ease;
         }
@@ -130,11 +131,9 @@
             color: #4cd3c2;
             margin-bottom: 10px;
         }
-
         .transaction-card p {
             font-size: 16px;
             margin-bottom: 8px;
-            color: #d0e7f9;
         }
 
         /* ChatGPT Recommendations */
@@ -148,9 +147,9 @@
         #chatgpt-recommendations h2 {
             font-size: 24px;
             font-weight: 600;
-            color: #4cd3c2;
             margin-bottom: 15px;
-            text-align: center;
+            color: #4cd3c2;
+            text-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
         }
 
         #recommendation-input {
@@ -191,21 +190,6 @@
             font-style: italic;
             text-align: center;
         }
-        @media (max-width: 768px) {
-            .container {
-                flex-direction: column;
-            }
-
-            #live-sidebar {
-                width: 100%;
-                border-right: none;
-                border-bottom: 2px solid #1c1f33;
-            }
-
-            main {
-                width: 100%;
-            }
-        }
     </style>
 </head>
 <body>
@@ -214,7 +198,7 @@
         <aside id="live-sidebar">
             <h2>Live Crypto Prices</h2>
             <ul id="crypto-prices-list">
-                <li>Loading prices...</li>
+                <!-- Symbols will be rendered dynamically -->
             </ul>
         </aside>
 
@@ -226,11 +210,46 @@
             <section id="portfolio">
                 <h2>Add a Transaction</h2>
                 <form id="transaction-form">
-                    <input type="text" id="crypto-name" placeholder="Cryptocurrency" required>
+                    <select id="crypto-name" required>
+                        <option value="" disabled selected>Select Cryptocurrency</option>
+                        <option value="BTC">Bitcoin</option>
+                        <option value="ETH">Ethereum</option>
+                        <option value="ADA">Cardano</option>
+                        <option value="SOL">Solana</option>
+                        <option value="BNB">Binance Coin</option>
+                        <option value="XRP">Ripple</option>
+                        <option value="LTC">Litecoin</option>
+                        <option value="DOT">Polkadot</option>
+                        <option value="BCH">Bitcoin Cash</option>
+                        <option value="LINK">Chainlink</option>
+                        <option value="AAVE">Aave</option>
+                        <option value="UNI">Uniswap</option>
+                        <option value="AVAX">Avalanche</option>
+                        <option value="FTT">FTX Token</option>
+                        <option value="EOS">EOS</option>
+                        <option value="ZRX">0x</option>
+                        <option value="XMR">Monero</option>
+                        <option value="NEO">NEO</option>
+                        <option value="BAT">Basic Attention Token</option>
+                        <option value="HBAR">Hedera Hashgraph</option>
+                        <option value="DASH">Dash</option>
+                        <option value="COMP">Compound</option>
+                        <option value="MKR">Maker</option>
+                        <option value="CRV">Curve DAO Token</option>
+                        <option value="FET">Fetch.ai</option>
+                        <option value="REN">Ren</option>
+                        <option value="KSM">Kusama</option>
+                        <option value="SUSHI">SushiSwap</option>
+                        <option value="GRT">The Graph</option>
+                        <option value="CTSI">Cartesi</option>
+                        <option value="STPT">STP Network</option>
+
                     <input type="number" id="crypto-quantity" placeholder="Quantity" step="0.00000001" required>
                     <input type="number" id="crypto-price" placeholder="Price (USD)" step="0.01" required>
                     <button type="submit">Add Transaction</button>
                 </form>
+
+                <div id="transaction-result"></div>
             </section>
 
             <!-- AI Recommendations Section -->
@@ -250,3 +269,5 @@
     <script src="./assets/js/homepage.js"></script>
 </body>
 </html>
+
+       

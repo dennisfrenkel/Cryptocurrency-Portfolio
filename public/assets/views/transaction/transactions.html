@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <title>Your Transactions</title>
     <style>
         body {
@@ -77,6 +78,18 @@
             text-align: center;
             margin-top: 10px;
         }
+
+        /* Pie Chart Styling */
+        #pie-chart-container {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        canvas {
+            max-width: 100%;
+            height: auto;
+            max-height: 300px; /* Set max height to make it smaller */
+        }
     </style>
 </head>
 <body>
@@ -96,6 +109,13 @@
             <tbody>
             </tbody>
         </table>
+
+        <!-- Pie Chart for Transaction Data -->
+        <div id="pie-chart-container">
+            <h2>Transaction Breakdown</h2>
+            <canvas id="cryptoPieChart"></canvas>
+        </div>
+
         <p id="error-message" style="display: none;"></p>
     </div>
 
@@ -123,6 +143,7 @@
 
                     if (transactions && Array.isArray(transactions)) {
                         renderTransactions(transactions);
+                        renderPieChart(transactions); // pie chart with transaction data
                     } else {
                         transactionsTableBody.innerHTML = `<tr><td colspan="5">No transactions found.</td></tr>`;
                     }
@@ -144,6 +165,47 @@
                             <td>${new Date(tx.transaction_date).toLocaleString()}</td>
                         </tr>
                     `).join("");
+            };
+
+            const renderPieChart = (data) => {
+                const labels = [];
+                const chartData = [];
+
+                // Group transactions by cryptocurrency and calculate
+                const cryptoData = {};
+                data.forEach(tx => {
+                    if (cryptoData[tx.cryptocurrency]) {
+                        cryptoData[tx.cryptocurrency].quantity += parseFloat(tx.quantity);
+                        cryptoData[tx.cryptocurrency].value += parseFloat(tx.price) * parseFloat(tx.quantity);
+                    } else {
+                        cryptoData[tx.cryptocurrency] = {
+                            quantity: parseFloat(tx.quantity),
+                            value: parseFloat(tx.price) * parseFloat(tx.quantity)
+                        };
+                    }
+                });
+
+                // Prepare data for pie chart
+                for (const crypto in cryptoData) {
+                    labels.push(crypto);
+                    chartData.push(cryptoData[crypto].value);
+                }
+
+                const ctx = document.getElementById('cryptoPieChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            data: chartData,
+                            backgroundColor: ['#FF5733', '#33FF57', '#3357FF', '#FF33A6', '#FFC300'],
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false
+                    }
+                });
             };
 
             const sortTransactions = (criteria, direction = 'asc') => {

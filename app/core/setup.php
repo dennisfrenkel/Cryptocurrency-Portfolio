@@ -41,10 +41,9 @@ define('DBUSER', $env['DBUSER']);
 define('DBPASS', $env['DBPASS']);
 define('DBDRIVER', $env['DBDRIVER'] ?? 'mysql');
 
-// API keys
-define('OPENAI_API_KEY', getenv('OPENAI_API_KEY') ?: $env['OPENAI_API_KEY'] ?? '');
-define('CMC_API_KEY', getenv('CMC_API_KEY') ?: $env['CMC_API_KEY'] ?? '');
-
+// Define API keys directly from the $env array
+define('OPENAI_API_KEY', $env['OPENAI_API_KEY'] ?? '');
+define('CMC_API_KEY', $env['CMC_API_KEY'] ?? '');
 
 // Define base paths
 define('APP_PATH', realpath('../app'));          // Path to the app directory
@@ -62,3 +61,4 @@ if (DEBUG) {
     error_reporting(0);
     ini_set('display_errors', '0');
 }
+?>
