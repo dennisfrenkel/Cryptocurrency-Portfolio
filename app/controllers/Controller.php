@@ -37,7 +37,7 @@ abstract class Controller {
         // Convert the $json array to a JSON string and output it.
         echo json_encode($json);
 
-        // Terminate the script after sending the response.
+        // Terminate the script
         exit();
     }
 
