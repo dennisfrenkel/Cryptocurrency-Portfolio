@@ -11,17 +11,17 @@ document.addEventListener("DOMContentLoaded", async () => {
      */
     async function checkAuthentication() {
         try {
-            const response = await fetch("/api/auth");
+            const response = await fetch("/api/auth"); // Call to your backend to check if the user is authenticated
 
             if (response.status !== 200) {
-                window.location.href = "/login"; // Redirect to login if not authenticated
+                window.location.href = "/login"; // Redirect to login page if not authenticated
                 return false;
             }
 
-            return true;
+            return true; // Return true if user is authenticated
         } catch (error) {
             console.error("Error checking authentication:", error);
-            window.location.href = "/login";
+            window.location.href = "/login"; // If there's an error checking auth, redirect to login
             return false;
         }
     }
@@ -44,9 +44,10 @@ document.addEventListener("DOMContentLoaded", async () => {
                 throw new Error("No data received from the crypto API.");
             }
 
+            // Display the prices on the page
             pricesList.innerHTML = Object.keys(prices)
                 .map((symbol) => {
-                    const price = prices[symbol]?.quote?.USD?.price?.toFixed(2) || "N/A";
+                    const price = prices[symbol]?.quote?.USD?.price?.toFixed(2) || "N/A"; // Use the price if available
                     return `
                         <li>
                             <span>${symbol}</span>
@@ -133,7 +134,7 @@ document.addEventListener("DOMContentLoaded", async () => {
      * Initialize and load data.
      */
     if (await checkAuthentication()) {
-        fetchLivePrices(); // Load live prices
+        fetchLivePrices(); // Load live prices when the user is authenticated
         setInterval(fetchLivePrices, 30000); // Refresh prices every 30 seconds
     }
 });

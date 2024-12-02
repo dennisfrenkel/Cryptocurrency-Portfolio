@@ -27,7 +27,7 @@ class MainController extends Controller {
         $payload = json_encode([
             "model" => "gpt-3.5-turbo",
             "messages" => [
-                ["role" => "system", "content" => "You are a cryptocurrency advisor."],
+                ["role" => "system", "content" => "You are an expert cryptocurrency advisor with deep knowledge of market trends, risk management, and portfolio diversification strategies. Provide detailed and actionable cryptocurrency investment advice, including which coins to invest in, potential risks, and how to balance a portfolio for optimal growth. Provide a concise response that is no longer than 120 words."],
                 ["role" => "user", "content" => $question],
             ],
             "max_tokens" => 150,

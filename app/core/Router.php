@@ -18,6 +18,8 @@ class Router {
 
         // Redirect to login if user is not authenticated and accessing a protected route
         if (!$this->isAuthenticated() && !$this->isLoginRoute()) {
+            // Store the current page in session to redirect after login
+            $_SESSION['redirect_after_login'] = $_SERVER['REQUEST_URI'];
             error_log("Redirecting unauthenticated user to /login");
             header('Location: /login');
             exit();
@@ -98,7 +100,7 @@ class Router {
         // Handle login route
         if ($this->urlArray[0] === 'login' && $_SERVER['REQUEST_METHOD'] === 'GET') {
             error_log("Rendering login page...");
-            $userController->loginView();
+            $userController->loginView(); // Render the login page
             return;
         }
 
