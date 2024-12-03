@@ -8,7 +8,7 @@ require '../app/core/Router.php';
 require '../app/core/Logger.php';
 
 // base models and controllers
-require '../app/models/Model.php';
+require '../app/models/model.php';
 require '../app/controllers/Controller.php';
 
 // application-specific models
