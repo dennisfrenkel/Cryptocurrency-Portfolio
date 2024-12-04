@@ -44,36 +44,6 @@ body {
     align-items: center;
 }
 
-#crypto-prices-list li span {
-    font-weight: bold;
-}
-/* Add cryptocurrency symbols */
-#crypto-prices-list li span:before {
-    content: attr(data-icon);
-    font-size: 18px;
-    margin-right: 5px;
-}
-
-/* Define symbols for each cryptocurrency */
-#crypto-prices-list li span[data-symbol="BTC"] {
-    data-icon: "💰";
-}
-
-#crypto-prices-list li span[data-symbol="ETH"] {
-    data-icon: "💎";
-}
-
-#crypto-prices-list li span[data-symbol="ADA"] {
-    data-icon: "🔵";
-}
-
-#crypto-prices-list li span[data-symbol="SOL"] {
-    data-icon: "⚡";
-}
-
-#crypto-prices-list li span[data-symbol="BNB"] {
-    data-icon: "🔥";
-}
 
 /* Main Content Styling */
 main {
@@ -119,6 +89,7 @@ button {
 button:hover {
     background-color: #0056b3;
 }
+
 
 /* ChatGPT Recommendations Section */
 #chatgpt-recommendations {
