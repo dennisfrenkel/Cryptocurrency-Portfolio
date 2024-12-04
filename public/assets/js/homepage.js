@@ -1,53 +1,41 @@
 document.addEventListener("DOMContentLoaded", async () => {
     const transactionForm = document.getElementById("transaction-form");
+    const cryptoDropdown = document.getElementById("crypto-name");
+    const otherCryptoInput = document.getElementById("other-crypto-name");
     const pricesList = document.getElementById("crypto-prices-list");
     const recommendationForm = document.getElementById("recommendation-form");
     const recommendationResult = document.getElementById("recommendation-result");
 
-    const cryptoSymbols = ["BTC", "ETH", "ADA", "SOL", "BNB"]; // Cryptocurrencies to track
+    const cryptoSymbols = ["BTC", "ETH", "ADA", "SOL", "BNB", "XRP", "DOGE", "XLM", "SHIB", "TRX", "AVAX"]; // Cryptocurrencies to track
 
-    /**
-     * Check if the user is authenticated.
-     */
     async function checkAuthentication() {
         try {
-            const response = await fetch("/api/auth"); // Call to your backend to check if the user is authenticated
-
+            const response = await fetch("/api/auth");
             if (response.status !== 200) {
-                window.location.href = "/login"; // Redirect to login page if not authenticated
+                window.location.href = "/login";
                 return false;
             }
-
-            return true; // Return true if user is authenticated
+            return true;
         } catch (error) {
             console.error("Error checking authentication:", error);
-            window.location.href = "/login"; // If there's an error checking auth, redirect to login
+            window.location.href = "/login";
             return false;
         }
     }
 
-    /**
-     * Fetch live cryptocurrency prices.
-     */
     async function fetchLivePrices() {
         try {
             const response = await fetch(`/api/crypto-prices?symbols=${cryptoSymbols.join(",")}`);
-
             if (!response.ok) {
                 throw new Error("Failed to fetch cryptocurrency prices.");
             }
-
             const data = await response.json();
             const prices = data.data;
+            if (!prices) throw new Error("No data received from the crypto API.");
 
-            if (!prices) {
-                throw new Error("No data received from the crypto API.");
-            }
-
-            // Display the prices on the page
             pricesList.innerHTML = Object.keys(prices)
                 .map((symbol) => {
-                    const price = prices[symbol]?.quote?.USD?.price?.toFixed(2) || "N/A"; // Use the price if available
+                    const price = prices[symbol]?.quote?.USD?.price?.toFixed(2) || "N/A";
                     return `
                         <li>
                             <span>${symbol}</span>
@@ -62,12 +50,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     }
 
-    /**
-     * Handle ChatGPT recommendations.
-     */
     recommendationForm.addEventListener("submit", async (e) => {
         e.preventDefault();
-
         const userInput = document.getElementById("recommendation-input").value.trim();
         if (!userInput) {
             recommendationResult.innerHTML = `<p>Please enter a valid question.</p>`;
@@ -80,7 +64,6 @@ document.addEventListener("DOMContentLoaded", async () => {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ question: userInput }),
             });
-
             const data = await response.json();
             recommendationResult.innerHTML = data.recommendation
                 ? `<p>${data.recommendation}</p>`
@@ -91,13 +74,21 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     });
 
-    /**
-     * Handle new transaction submissions.
-     */
+    cryptoDropdown.addEventListener("change", () => {
+        if (cryptoDropdown.value === "other") {
+            otherCryptoInput.style.display = "block";
+            otherCryptoInput.required = true;
+        } else {
+            otherCryptoInput.style.display = "none";
+            otherCryptoInput.required = false;
+        }
+    });
+
     transactionForm.addEventListener("submit", async (e) => {
         e.preventDefault();
+        let cryptoName = cryptoDropdown.value;
+        if (cryptoName === "other") cryptoName = otherCryptoInput.value.trim();
 
-        const cryptoName = document.getElementById("crypto-name").value.trim();
         const cryptoQuantity = parseFloat(document.getElementById("crypto-quantity").value);
         const cryptoPrice = parseFloat(document.getElementById("crypto-price").value);
 
@@ -116,10 +107,9 @@ document.addEventListener("DOMContentLoaded", async () => {
                     price: cryptoPrice,
                 }),
             });
-
             if (response.ok) {
                 alert("Transaction added successfully.");
-                window.location.href = "/transactions"; // Redirect to transactions page
+                window.location.href = "/transactions";
             } else {
                 const errorData = await response.json();
                 alert(errorData.message || "Failed to add transaction.");
@@ -130,11 +120,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     });
 
-    /**
-     * Initialize and load data.
-     */
     if (await checkAuthentication()) {
-        fetchLivePrices(); // Load live prices when the user is authenticated
-        setInterval(fetchLivePrices, 30000); // Refresh prices every 30 seconds
+        fetchLivePrices();
+        setInterval(fetchLivePrices, 30000);
     }
 });
