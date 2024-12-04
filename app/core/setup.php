@@ -53,7 +53,7 @@ define('PUBLIC_VIEW_PATH', PUBLIC_PATH . '/assets/views'); // Path to the public
 
 define('DEBUG', $env['DEBUG'] ?? true);
 
-// More troubleshooting
+// troubleshooting for build and future deployment
 if (DEBUG) {
     error_reporting(E_ALL);
     ini_set('display_errors', '1');
