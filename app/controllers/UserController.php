@@ -37,7 +37,7 @@ class UserController extends Controller {
                     $_SESSION['email'] = $data['email'];
                     $this->returnJSON(['status' => 'success', 'message' => 'User registered and logged in']);
                 } else {
-                    $this->returnJSON(['status' => 'error', 'message' => 'Failed to create user']);
+                    $this->returnJSON(['status' => 'error', 'message' => 'Failed to create user. Try again!']);
                 }
             } else {
                 $_SESSION['user_id'] = $user->id;
