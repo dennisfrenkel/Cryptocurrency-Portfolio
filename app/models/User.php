@@ -17,9 +17,6 @@ class User extends Model {
     /**
      * Find a user by email.
      * Returns the first matching user.
-     * 
-     * @param string $email
-     * @return object|null
      */
     public function findByEmail($email) {
         $query = "SELECT * FROM $this->table WHERE email = :email LIMIT 1";
@@ -29,9 +26,6 @@ class User extends Model {
     
     /**
      * Create a new user with just an email.
-     * 
-     * @param array $data
-     * @return int|null The user ID or null if not successful
      */
     public function saveUser($data) {
         // Prepare an insert query to add a new user
@@ -46,9 +40,6 @@ class User extends Model {
 
     /**
      * Delete a user by ID.
-     * 
-     * @param int $userId
-     * @return bool Whether the deletion was successful
      */
     public function deleteUser($userId) {
         // Delete a user based on their ID
@@ -57,9 +48,6 @@ class User extends Model {
 
     /**
      * Find a user by their ID.
-     * 
-     * @param int $id
-     * @return object|null
      */
     public function findById($id) {
         $query = "SELECT * FROM $this->table WHERE id = :id LIMIT 1";
