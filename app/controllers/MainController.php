@@ -79,7 +79,7 @@ class MainController extends Controller {
             return;
         }
 
-        $url = $this->buildCMCRequestUrl('BTC,ETH,ADA,SOL,BNB', 'USD');
+        $url = $this->buildCMCRequestUrl('BTC,ETH,ADA,SOL,BNB,XRP,DOGE,XLM,HBAR,TRX,AVAX', 'USD');
 
         $headers = [
             'Accepts: application/json',
