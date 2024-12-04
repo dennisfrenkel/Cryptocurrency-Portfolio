@@ -32,6 +32,11 @@ abstract class Model {
         }
         return false;
     }
+    public function lastInsertId() {
+        $pdo = $this->connect(); 
+        return $pdo->lastInsertId(); 
+    }
+
 
     public function findBy($column, $value) {
         $query = "SELECT * FROM $this->table WHERE $column = :value";
