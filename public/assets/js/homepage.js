@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const recommendationForm = document.getElementById("recommendation-form");
     const recommendationResult = document.getElementById("recommendation-result");
 
-    const cryptoSymbols = ["BTC", "ETH", "ADA", "SOL", "BNB", "XRP", "DOGE", "XLM", "SHIB", "TRX", "AVAX"]; // Cryptocurrencies to track
+    const cryptoSymbols = ["BTC", "ETH", "ADA", "SOL", "BNB", "XRP", "DOGE", "XLM", "HBAR", "TRX", "AVAX"]; // Cryptocurrencies to track
 
     async function checkAuthentication() {
         try {
